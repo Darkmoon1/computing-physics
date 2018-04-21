@@ -1,21 +1,26 @@
 import math
 import cmath
-import numpy
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 from sympy import *
 
+pi = math.pi
 e = math.e
-a = 0.529e-10
+a = 1
+#n=1-7 l<n  abs(m)<=l  r 0-10 theta 0-2pi phi -pi - pi 
+# a = 0.529e-10
 #n l m int r theta phi float
 def cal(n,l,m,r,theta,phi):
     Y_m_l_theta_phi = Y(m,l,theta,phi)
     column = (2.0/n/a)**3 * math.factorial(n-l-1)
     column = column/2.0/n/math.factorial(n+l)**3
     column = math.sqrt(column)
-    column = column * math.pow(e,-r/n/a) * math.pow(2*r/n/a,l)
-    #由于L函数定义参数为p q 因此此处应该将q-p替换为q
+    column = column * e**(-r/n/a) * (2*r/n/a)**l
+    #由于L函数定义参数为p q 因此此处应该将q-p替换为q 
     column = column*L(2*l+1,n+l,2*r/n/a)
     column = column * Y_m_l_theta_phi
-    column = column**2 * Y_m_l_theta_phi**2 * r**2
+    column = column**2
     return column
 
 def L(p,q,y):
@@ -44,13 +49,42 @@ def LegendrePloy(y,l,m):
     return pl
 
 def Y(m,l,theta,phi):
-    y = pow(-1,m)*sqrt((2*l+1)/4/math.pi*math.factorial(l-abs(m))/math.factorial(l+abs(m)))*cmath.exp(complex(0,1)*m*phi)*LegendrePloy(math.cos(theta),l,m)
+    y = (-1)**m *sqrt((2*l+1)/4/pi*math.factorial(l-abs(m))/math.factorial(l+abs(m)))*np.exp(complex(0,1)*m*phi)*LegendrePloy(np.cos(theta),l,m)
     return y
 
 
 
+#n=1-7 l<n  abs(m)<=l  r 0-10 theta 0-2pi phi -pi - pi 
 
-print(cal(1,0,0,a,0.0,0.0))
+#x = rcos(phi)sin(theta) y=rsin()sin z=rcos(thetr)
 
+step = 0.1
+# phi = np.arange(-pi,pi,step)
+theta = np.arange(0,pi,step)
+phi = np.arange(0,2*pi,step)
+
+
+n = 1
+l = np.arange(0,n,1)
+m = np.arange(0,n,1)
+
+
+ax = plt.subplot(111, projection='3d')
+for r in range(1,11):
+    for theta_one in theta:
+        R = cal(n,0,0,r,theta_one,phi)
+        x_r = np.array(R*np.sin(theta_one)*np.cos(phi),'float64')
+        y_r = np.array(R*np.sin(theta_one)*np.sin(phi),'float64')
+        z_r = np.array(R*np.cos(theta_one),'float64')
+        ax.scatter(x_r,y_r,z_r,c='y')
+# 必须显示声明 dtype => 'float64'
+# 具体函数方法可用 help(function) 查看，如：help(ax.plot_surface)
+# ax.scatter(x_r[:8], y_r[:8], res[:8])
+
+
+ax.set_zlabel('Z')  # 坐标轴
+ax.set_ylabel('Y')
+ax.set_xlabel('X')
+plt.show()
 
 
