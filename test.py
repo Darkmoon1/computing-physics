@@ -1,31 +1,38 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Sep 24 16:37:21 2015
+ 
+X={"x0":0.0}
+P={"p0":0.0}
+G={"g0":0.0}
+nn=0
 
-@author: Eddy_zheng
-"""
-import numpy as np
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
+x=-4
+s=0.05
+m=160
+E=0.5
 
-data = np.random.randint(0, 255, size=[40, 40, 40])
+for i in list(range(m+1)):
+    X["x%s" % i]=0.0 #储存x
 
-x, y, z = data[0], data[1], data[2]
-ax = plt.subplot(111, projection='3d')  # 创建一个三维的绘图工程
-#  将数据点分成三部分画，在颜色上有区分度
+for i in list(range(m+1)):
+    P["p%s" % i]=0.0 #储存psi
+    
+for i in list(range(m+1)):
+    G["g%s" % i]=0.0 #储存g
 
-# x = np.arange(1,10,1)
-# y = np.arange(10,1,-1)
-z = np.array([-0,0.0430785586036973,0.0430785586036973,0.0430785586036973,0.0430785586036973,0.0430785586036973,0.0430785586036973])
-y = np.array([-0.0,      -0.70807342586036973, -0.82682181586036973 ,-0.01991486586036973 ,-0.57275002586036973 ,-0.91953576586036973
-, -0.07807302586036973])
-x = np.array([-0.0, -0.45464871586036973 , 0.37840125586036973 , 0.13970775586036973 ,-0.49467912586036973 , 0.27201056586036973, 0.26828646586036973])
+P["p1"]=0.0001
+X["x0"]=x
+X["x1"]=X["x0"]+s
+G["g0"]=X["x0"]*X["x0"]-2*E
+G["g1"]=X["x1"]*X["x1"]-2*E
+ss=s*s/12
 
-ax.scatter(x, y, z, c='y')  # 绘制数据点
-
-
-ax.set_zlabel('Z')  # 坐标轴
-ax.set_ylabel('Y')
-ax.set_xlabel('X')
-plt.show()
-print(np.sin(2*3.14))
+for i in range(1,m+1):
+    X["x%s" % (i+1)]=X["x%s" % i]+s
+    G["g%s" % (i+1)]=X["x%s" % (i+1)]*X["x%s" % (i+1)]-2*E
+    P["p%s" % (i+1)]=(-P["p%s" % (i-1)]+2*P["p%s" % i]+10*G["g%s" % i]*P["p%s" % i]*ss+G["g%s" % (i-1)]*P["p%s" % (i-1)]*ss)/(1-G["g%s" % (i+1)]*ss)
+    if (P["p%s" % i]*P["p%s" % (i+1)]<0):
+        nn=nn+1
+        
+print("Er="+str(E))
+print("Nodes="+str(nn))
+for i in range(m+1):
+    print("Psir(%f)=%f" % (X["x%s" % i],P["p%s" % i]))
