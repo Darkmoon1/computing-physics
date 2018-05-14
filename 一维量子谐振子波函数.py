@@ -27,11 +27,16 @@ def Numerov(func,Xmin,Xmax,args,step = 0.05):
 Xmin = -4
 Xmax = 4
 x = np.linspace(Xmin,Xmax,8/0.05 + 1)
-Eguess = 0.5
+Eguess =[0.5,1.5,2.5]
 V = 1/2*x**2
-G = 2*V - 2*Eguess
+G0 = 2*V - 2*Eguess[0]
+G1 = 2*V - 2*Eguess[1]
+G2 = 2*V - 2*Eguess[2]
 
-res = Numerov(cal,Xmin,Xmax,G)
-plt.plot(x,res)
+res0 = Numerov(cal,Xmin,Xmax,G0)
+res1 = Numerov(cal,Xmin,Xmax,G1)
+res2 = Numerov(cal,Xmin,Xmax,G2)
+
+plt.plot(x,res0,x,res1,x,res2)
 plt.grid(True)
 plt.show()
