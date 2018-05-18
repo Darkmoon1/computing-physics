@@ -31,10 +31,13 @@ def cal(m,h,E,U0,A1,a,x1,x2,x3):
     phi2 = B1*e**(1j*k2*x2) + B2*e**(-1j*k2*x2)
     phi3 = C*e**(1j*k1*x3)
     
-    D = abs(C)**2/abs(A1)**2
-    R = abs(A2)**2/abs(A1)**2
+    T = abs(C)**2/abs(A1)**2   #透射率
+    R = abs(A2)**2/abs(A1)**2  #反射率
 
     plt.plot(x1,phi1,'r',x2,phi2,'g',x3,phi3,'orange')
+    # plt.scatter(x1,phi1)
+    # plt.scatter(x2,phi2)
+    # plt.scatter(x3,phi3)
     plt.axvline(0)
     plt.axvline(a)
     
@@ -45,15 +48,14 @@ def cal(m,h,E,U0,A1,a,x1,x2,x3):
 
 step = 100
 
-
 m = 9.1e-31
 h = 1.05457266e-34
-E = 1.5
-U0 = 1.0
-a = 0.1
+E = h**2/m
+U0 = 1.00001*E
+a = 1
 A1 = 1
-x1 = np.linspace(-0.1,0,step)
+x1 = np.linspace(-5,0,step)
 x2 = np.linspace(0,a,step)
-x3 = np.linspace(a,0.2,step)
+x3 = np.linspace(a,6,step)
 cal(m,h,E,U0,A1,a,x1,x2,x3)
 # cal1(m,h,E,U0,A1,a,x1,x2,x3)
