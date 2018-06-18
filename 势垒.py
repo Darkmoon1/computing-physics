@@ -1,5 +1,5 @@
 
-    # Created by YHY
+# Created by YHY
     
 import math
 import cmath
@@ -58,4 +58,4 @@ x1 = np.linspace(-5,0,step)
 x2 = np.linspace(0,a,step)
 x3 = np.linspace(a,6,step)
 cal(m,h,E,U0,A1,a,x1,x2,x3)
-# cal1(m,h,E,U0,A1,a,x1,x2,x3)
+
